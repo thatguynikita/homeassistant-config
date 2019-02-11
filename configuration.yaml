@@ -39,9 +39,6 @@ discovery:
   ignore:
     - igd
 
-# Allows you to issue voice commands from the frontend in enabled browsers
-#conversation:
-
 # Enables support for tracking state changes over time
 history:
   exclude:
@@ -217,9 +214,9 @@ notify:
     platform: telegram
     chat_id: !secret telegram_chat_id
 
-group: !include groups.yaml
+group: 
 automation: !include automations.yaml
-script: !include scripts.yaml
+script: !include_dir_merge_list scripts
 zone: !include zones.yaml
 system_health:
 
@@ -249,7 +246,7 @@ device_tracker:
 person:
   - name: Nikita
     id: nik123
-    user_id: baa208a2481e4f1d943d3b9edf8c6371
+    user_id: !secret nikita_user_id
     device_trackers:
       - device_tracker.40_4e_36_89_be_2f
       - device_tracker.d0_81_7a_b6_0c_02
