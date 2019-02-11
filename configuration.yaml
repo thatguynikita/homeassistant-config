@@ -215,7 +215,7 @@ notify:
     chat_id: !secret telegram_chat_id
 
 group: 
-automation: !include automations.yaml
+automation: !include_dir_merge_list automations
 script: !include_dir_merge_list scripts
 zone: !include zones.yaml
 system_health:
