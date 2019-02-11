@@ -1,0 +1,161 @@
+- id: '1546705407759'
+  alias: Notify LIGHTS state
+  hide_entity: false
+  trigger:
+  - entity_id: light.table_lamp
+    platform: state
+  condition:
+  - after: 08:00:00
+    before: '23:00:00'
+    condition: time
+  action:
+  - data_template:
+      message: _{{ trigger.from_state.name }}_ has been turned *{{ trigger.to_state.state
+        | upper }}*
+      title: 💡
+    service: notify.telegram
+- id: '1547712936674'
+  alias: Notify DEVICE state
+  hide_entity: false
+  trigger:
+  - entity_id: device_tracker.oneplus_5t,device_tracker.94_65_2d_46_f8_44
+    platform: state
+  condition:
+  - after: 08:00:00
+    before: '23:00:00'
+    condition: time
+  action:
+  - data_template:
+      message: _{{ trigger.from_state.name }}_ is now *{{ trigger.to_state.state |
+        upper }}*
+      title: 📲
+    service: notify.telegram
+- id: '1547714148688'
+  alias: Telegram - /say
+  trigger:
+  - event_data:
+      command: /say
+    event_type: telegram_command
+    platform: event
+  condition: []
+  action:
+  - data_template:
+      entity_id: media_player.kitchen_speaker
+      message: '{% for state in trigger.event.data["args"] %} {{ state }} {% endfor
+        %}'
+    service: tts.amazon_polly_say
+  hide_entity: true
+- id: '1547716337730'
+  alias: Telegram - /audio
+  trigger:
+  - event_data:
+      command: /audio
+    event_type: telegram_command
+    platform: event
+  condition: []
+  action:
+  - data_template:
+      entity_id: media_player.kitchen_speaker
+      media_content_id: '{% for state in trigger.event.data["args"] %} {{ state }}
+        {% endfor %}'
+      media_content_type: audio/mp3
+    service: media_player.play_media
+  hide_entity: true
+- id: '1547717604128'
+  alias: Telegram - /video
+  hide_entity: true
+  trigger:
+  - event_data:
+      command: /video
+    event_type: telegram_command
+    platform: event
+  condition: []
+  action:
+  - service: media_player.play_media
+    data_template:
+      entity_id: media_player.living_room_tv
+      media_content_type: video/mp4
+      media_content_id: '{% for state in trigger.event.data["args"] %} {{ state }}
+        {% endfor %}'
+- id: '1563031125053'
+  alias: Set default theme
+  hide_entity: true
+  trigger:
+  - event: start
+    platform: homeassistant
+  condition: []
+  action:
+  - data:
+      name: dark_orange
+    service: frontend.set_theme
+- id: '1563037569981'
+  alias: Telegram - /status
+  trigger:
+  - event_data:
+      command: /status
+    event_type: telegram_command
+    platform: event
+  condition: []
+  action:
+  - service: notify.telegram
+    data_template:
+      title: '*Status* on _{{ utcnow() }}_'
+      message: '🏮_Illuminance:_ *{{ states.sensor.illuminance.state_with_unit }}*
+
+        🌡_Temperature:_ *{{ states.sensor.temperature.state_with_unit }}*
+
+        💧_Humidity:_ *{{ states.sensor.humidity.state_with_unit }}*
+
+        💡_Table Lamp_ is *{{ states.light.table_lamp.state_with_unit }}* {% for person
+        in states.person %}
+
+        👨_{{ person.name }}_ is *{{ person.state_with_unit }}* {% endfor %}'
+- id: '1563093267421'
+  alias: Notify MOTION detection
+  trigger:
+  - entity_id: binary_sensor.bedroom_motion
+    platform: state
+  condition:
+  - condition: state
+    entity_id: person.nikita
+    state: not_home
+  action:
+  - data:
+      data:
+        photo:
+        - caption: 🎬Motion detection on _{{ utcnow() }}_
+          password: !secret camera_password
+          url: !secret camera_still_image_url
+          username: !secret camera_username
+          verify_ssl: false
+      message: Motion detection on _{{ utcnow() }}_
+    service: notify.telegram
+- id: '1563094586590'
+  alias: Telegram - /camera
+  trigger:
+  - event_data:
+      command: /camera
+    event_type: telegram_command
+    platform: event
+  condition: []
+  action:
+  - service: notify.telegram
+    data:
+      message: Camera on _{{ utcnow() }}_
+      data:
+        photo:
+        - url: !secret camera_still_image_url
+          username: !secret camera_username
+          password: !secret camera_password
+          caption: 🎥Camera on _{{ utcnow() }}_
+          verify_ssl: false
+- id: '1563125175711'
+  alias: Update OpenUV every 30 mins
+  trigger:
+  - hours: ''
+    minutes: /30
+    platform: time_pattern
+    seconds: ''
+  condition: []
+  action:
+  - service: openuv.update_data

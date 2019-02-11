@@ -1,0 +1,12 @@
+*.log
+*.db
+*.db-shm
+*.db-wal
+deps
+.cloud
+.storage
+tts
+secrets.yaml
+known_devices.yaml
+plex.conf
+.uuid

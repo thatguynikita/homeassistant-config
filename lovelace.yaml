@@ -1,0 +1,54 @@
+title: Home
+views:
+  - badges: []
+    cards:
+      - content: ' ![Image](/local/logo_cropped.png)'
+        type: markdown
+      - cards:
+          - camera_image: camera.pizero
+            entities:
+              - entity: binary_sensor.bedroom_motion
+                icon: 'mdi:motion-sensor'
+              - entity: binary_sensor.camera_motion
+                icon: 'mdi:cctv'
+              - entity: light.table_lamp
+                icon: 'mdi:desk-lamp'
+            title: Bedroom
+            type: picture-glance
+          - entities:
+              - entity: person.nikita
+                icon: 'mdi:account-tie'
+              - entity: person.askhat
+              - entity: media_player.kitchen_speaker
+                icon: 'mdi:google-home'
+              - entity: media_player.living_room_tv
+                icon: 'mdi:television-classic'
+            type: glance
+        type: vertical-stack
+      - cards:
+          - cards:
+              - entity: sensor.illuminance
+                graph: line
+                icon: 'mdi:car-light-dimmed'
+                type: sensor
+              - entity: sensor.temperature
+                graph: line
+                type: sensor
+            type: horizontal-stack
+          - cards:
+              - entity: sensor.humidity
+                graph: line
+                icon: 'mdi:water-percent'
+                type: sensor
+              - entity: sensor.mold
+                graph: line
+                icon: 'mdi:spray-bottle'
+                type: sensor
+            type: horizontal-stack
+          - entity: weather.home
+            type: weather-forecast
+        type: vertical-stack
+    icon: 'mdi:home-city-outline'
+    path: ''
+    theme: Light - Blue
+    title: Home

@@ -1,0 +1,278 @@
+homeassistant:
+  # Name of the location where Home Assistant is running
+  name: Home
+  # Location required to calculate the time the sun rises and sets
+  latitude: !secret home_latitude
+  longitude: !secret home_longitude
+  # Impacts weather/sunrise data (altitude above sea level in meters)
+  elevation: !secret home_elevation
+  # metric for Metric, imperial for Imperial
+  unit_system: metric
+  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  time_zone: Europe/Moscow
+  # Customization file
+  customize: !include customize.yaml
+
+# Enables the frontend
+frontend:
+  #themes: !include themes.yaml
+  themes: !include_dir_merge_named themes
+
+# Enables configuration UI
+config:
+
+# Uncomment this if you are using SSL/TLS, running in Docker container, etc.
+http:
+  base_url: !secret base_url 
+
+# Checks for available updates
+# Note: This component will send some information about your system to
+# the developers to assist with development of Home Assistant.
+# For more information, please see:
+# https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
+updater:
+  # Optional, allows Home Assistant developers to focus on popular components.
+  # include_used_components: true
+
+# Discover some devices automatically
+discovery:
+  ignore:
+    - igd
+
+# Allows you to issue voice commands from the frontend in enabled browsers
+#conversation:
+
+# Enables support for tracking state changes over time
+history:
+  exclude:
+    domains:
+      - automation
+      - script
+      - device_tracker
+history_graph:
+
+# View all events in a logbook
+logbook:
+  exclude:
+     entities:
+       - binary_sensor.bedroom_motion
+       - binary_sensor.camera_motion
+ 
+# Enables a map showing the location of tracked devices
+map:
+
+# Track the sun
+#sun:
+
+# MQTT platform
+mqtt:
+  broker: mqtt.home
+  client_id: home_assistant
+  username: !secret mqtt_username
+  password: !secret mqtt_password
+
+# Sensors
+sensor:
+  # Weather
+  - platform: yr
+    name: Weather
+    monitored_conditions:
+      - temperature
+  #    - windSpeed
+  #    - pressure
+  #    - humidity
+  # Moon phases      
+  - platform: moon
+  # MQTT sensors
+  - platform: mqtt
+    state_topic: "tele/multisensor/SENSOR"
+    name: Temperature
+    unit_of_measurement: "°C"
+    value_template: "{{ value_json.AM2301.Temperature }}" 
+  - platform: mqtt
+    state_topic: "tele/multisensor/SENSOR"
+    name: Humidity
+    unit_of_measurement: "%"
+    value_template: "{{ value_json.AM2301.Humidity }}" 
+  - platform: mqtt
+    state_topic: "tele/multisensor/SENSOR"
+    name: Illuminance
+    unit_of_measurement: "lx"
+    value_template: "{{ value_json.TSL2561.Illuminance }}"
+  # Mold indicator
+  - platform: mold_indicator
+    name: "Mold"
+    indoor_temp_sensor: sensor.temperature
+    indoor_humidity_sensor: sensor.humidity
+    outdoor_temp_sensor: sensor.weather_temperature
+    calibration_factor: 2.0
+
+# Motion detection
+binary_sensor:
+  - platform: mqtt
+    state_topic: "stat/multisensor/POWER"
+    name: bedroom_motion
+    device_class: motion
+  - platform: mqtt
+    state_topic: "cameras/motion/pizero"
+    payload_on: "ON"
+    payload_off: "OFF"
+    name: camera_motion
+    device_class: motion
+
+# Text to speech
+tts:
+  - platform: google_translate
+    service_name: google_say
+  - platform: amazon_polly
+    aws_access_key_id: !secret aws_access_key_id
+    aws_secret_access_key: !secret aws_secret_access_key
+    region_name: eu-central-1
+    #name: polly
+    voice: Maxim
+
+# Plex
+media_player:
+  - platform: plex
+    #entity_namespace: 'plex'
+    #include_non_clients: true
+    #scan_interval: 5
+    show_all_controls: true
+    #use_custom_entity_ids: true
+    use_episode_art: true
+    remove_unavailable_clients: false
+
+# Switches
+switch:
+  - platform: mqtt
+    name: "Table lamp"
+    command_topic: "cmnd/tablelamp/power"
+    state_topic: "stat/tablelamp/POWER"
+    qos: 1
+    payload_on: "ON"
+    payload_off: "OFF"
+    retain: true
+
+# Lights  
+light:
+  - platform: switch
+    name: "Table lamp"
+    entity_id: switch.table_lamp
+
+# Alexa smart home
+api:
+
+alexa:
+  smart_home:
+    endpoint: https://api.amazonalexa.com/v3/events
+    client_id: !secret alexa_client_id
+    client_secret: !secret alexa_client_secret
+    filter:
+      include_domains:
+        - light
+    
+# Google assistant integration    
+google_assistant:
+  project_id: !secret goog_assistant_project_id
+  api_key: !secret goog_assistant_api_key
+  expose_by_default: false
+  exposed_domains:
+    - switch
+    - light
+    - script
+  entity_config:
+    light.table_lamp:
+      expose: true
+    script.1546972108572:
+      expose: true
+
+# Cloudflare dyndns 
+#cloudflare:
+#  email: !secret cloudflare_email
+#  api_key: !secret cloudflare_api_key
+#  zone: !secret cloudflare_zone
+#  records:
+#    - !secret cloudflare_record
+
+# Owntracks
+#owntracks:
+#  max_gps_accuracy: 100
+
+# Telegram bot
+telegram_bot:
+  - platform: webhooks
+    api_key: !secret telegram_api_key
+    allowed_chat_ids:
+      - !secret telegram_chat_id
+    # Public proxy. For test purposes only
+#    proxy_url: !secret socks_proxy_url
+#    proxy_params: 
+#      username: !secret socks_username
+#      password: !secret socks_password
+    # Since we are behind CDN, those are Cloudflare IP addresses
+    trusted_networks: !include cloudflare_ips.yaml
+
+notify:
+  - name: telegram
+    platform: telegram
+    chat_id: !secret telegram_chat_id
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+zone: !include zones.yaml
+system_health:
+
+# MotionEye camera integration
+camera:
+  - platform: mjpeg
+    still_image_url: !secret camera_still_image_url
+    mjpeg_url: !secret camera_stream_source
+    name: pizero
+    username: !secret camera_username
+    password: !secret camera_password
+    verify_ssl: false
+
+
+# Presense detection
+device_tracker:
+  - platform: nmap_tracker
+    hosts: !secret ip_subnet
+    scan_options: " --privileged -sP "
+    interval_seconds: 20
+    new_device_defaults:
+      track_new_devices: false
+  - platform: bluetooth_tracker
+    new_device_defaults:
+      track_new_devices: false
+
+person:
+  - name: Nikita
+    id: nik123
+    user_id: baa208a2481e4f1d943d3b9edf8c6371
+    device_trackers:
+      - device_tracker.40_4e_36_89_be_2f
+      - device_tracker.d0_81_7a_b6_0c_02
+      - device_tracker.40_e2_30_5e_99_d5
+  - name: Askhat
+    id: ask234
+    device_trackers:
+      - device_tracker.oneplus_5t
+      - device_tracker.94_65_2d_46_f8_44
+      - device_tracker.30_85_a9_85_c4_7c
+
+# Limit database usage
+recorder:
+  purge_keep_days: 5
+  purge_interval: 2
+  #db_url: sqlite:////home/pi/hass/home-assistant_v2.db
+
+# OpenUV integration
+openuv:
+  api_key: !secret openuv_api_key
+  sensors:
+    monitored_conditions:
+      - current_uv_index
+      - current_uv_level
+      - max_uv_index
+      - safe_exposure_time_type_2

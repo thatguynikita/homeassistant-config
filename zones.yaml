@@ -1,0 +1,12 @@
+- name: home
+  latitude: !secret home_latitude
+  longitude: !secret home_longitude
+  radius: 50
+  friendly_name: Home
+  icon: mdi:home
+- name: gym
+  latitude: !secret gym_latitude
+  longitude: !secret gym_longitude
+  radius: 50
+  friendly_name: Gym
+  icon: mdi:dumbbell
