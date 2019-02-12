@@ -1,0 +1,15 @@
+alias: Notify LIGHTS state
+hide_entity: false
+trigger:
+- entity_id: light.table_lamp
+  platform: state
+condition:
+- after: 08:00:00
+  before: '23:00:00'
+  condition: time
+action:
+- data_template:
+    message: _{{ trigger.from_state.name }}_ has been turned *{{ trigger.to_state.state
+      | upper }}*
+    title: 💡
+  service: notify.telegram
