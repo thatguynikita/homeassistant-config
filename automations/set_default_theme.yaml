@@ -1,0 +1,10 @@
+alias: Set default theme
+hide_entity: true
+trigger:
+- event: start
+  platform: homeassistant
+condition: []
+action:
+- data:
+    name: dark_orange
+  service: frontend.set_theme
