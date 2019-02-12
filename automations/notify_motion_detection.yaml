@@ -1,0 +1,19 @@
+alias: Notify MOTION detection
+trigger:
+- entity_id: binary_sensor.bedroom_motion
+  platform: state
+condition:
+- condition: state
+  entity_id: person.nikita
+  state: not_home
+action:
+- data:
+    data:
+      photo:
+      - caption: 🎬Motion detection on _{{ utcnow() }}_
+        password: !secret camera_password
+        url: !secret camera_still_image_url
+        username: !secret camera_username
+        verify_ssl: false
+    message: Motion detection on _{{ utcnow() }}_
+  service: notify.telegram
