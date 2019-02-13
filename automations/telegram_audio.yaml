@@ -1,0 +1,15 @@
+alias: Telegram - /audio
+trigger:
+- event_data:
+    command: /audio
+  event_type: telegram_command
+  platform: event
+condition: []
+action:
+- data_template:
+    entity_id: media_player.kitchen_speaker
+    media_content_id: '{% for state in trigger.event.data["args"] %} {{ state }}
+      {% endfor %}'
+    media_content_type: audio/mp3
+  service: media_player.play_media
+hide_entity: true
