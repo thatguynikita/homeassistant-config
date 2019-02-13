@@ -1,0 +1,17 @@
+alias: Telegram - /status
+trigger:
+- event_data:
+    command: /status
+  event_type: telegram_command
+  platform: event
+condition: []
+action:
+- service: notify.telegram
+  data_template:
+    title: '*Status* on _{{ utcnow() }}_'
+    message: '🏮_Illuminance:_ *{{ states.sensor.illuminance.state_with_unit }}*
+      🌡_Temperature:_ *{{ states.sensor.temperature.state_with_unit }}*
+      💧_Humidity:_ *{{ states.sensor.humidity.state_with_unit }}*
+      💡_Table Lamp_ is *{{ states.light.table_lamp.state_with_unit }}* {% for person
+      in states.person %}
+      👨_{{ person.name }}_ is *{{ person.state_with_unit }}* {% endfor %}'
