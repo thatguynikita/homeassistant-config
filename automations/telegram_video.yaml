@@ -1,0 +1,15 @@
+alias: Telegram - /video
+hide_entity: true
+trigger:
+- event_data:
+    command: /video
+  event_type: telegram_command
+  platform: event
+condition: []
+action:
+- service: media_player.play_media
+  data_template:
+    entity_id: media_player.living_room_tv
+    media_content_type: video/mp4
+    media_content_id: '{% for state in trigger.event.data["args"] %} {{ state }}
+      {% endfor %}'
