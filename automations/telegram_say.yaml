@@ -1,0 +1,14 @@
+alias: Telegram - /say
+trigger:
+- event_data:
+    command: /say
+  event_type: telegram_command
+  platform: event
+condition: []
+action:
+- data_template:
+    entity_id: media_player.kitchen_speaker
+    message: '{% for state in trigger.event.data["args"] %} {{ state }} {% endfor
+      %}'
+  service: tts.amazon_polly_say
+hide_entity: true
