@@ -1,0 +1,18 @@
+alias: Telegram - /camera
+trigger:
+- event_data:
+    command: /camera
+  event_type: telegram_command
+  platform: event
+condition: []
+action:
+- service: notify.telegram
+  data:
+    message: Camera on _{{ utcnow() }}_
+    data:
+      photo:
+      - url: !secret camera_still_image_url
+        username: !secret camera_username
+        password: !secret camera_password
+        caption: 🎥Camera on _{{ utcnow() }}_
+        verify_ssl: false
