@@ -1,0 +1,9 @@
+alias: Update OpenUV every 30 mins
+trigger:
+- hours: ''
+  minutes: /30
+  platform: time_pattern
+  seconds: ''
+condition: []
+action:
+- service: openuv.update_data
