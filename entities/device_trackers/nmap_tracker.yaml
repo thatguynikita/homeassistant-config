@@ -1,0 +1,6 @@
+platform: nmap_tracker
+hosts: !secret ip_subnet
+scan_options: " --privileged -sP "
+interval_seconds: 20
+new_device_defaults:
+  track_new_devices: false
