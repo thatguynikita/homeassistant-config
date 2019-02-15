@@ -1,0 +1,7 @@
+platform: mjpeg
+still_image_url: !secret camera_still_image_url
+mjpeg_url: !secret camera_stream_source
+name: pizero
+username: !secret camera_username
+password: !secret camera_password
+verify_ssl: false
