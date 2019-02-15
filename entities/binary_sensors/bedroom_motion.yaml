@@ -1,0 +1,4 @@
+platform: mqtt
+state_topic: "stat/multisensor/POWER"
+name: bedroom_motion
+device_class: motion

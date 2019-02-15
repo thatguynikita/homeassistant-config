@@ -1,0 +1,6 @@
+platform: mqtt
+state_topic: "cameras/motion/pizero"
+payload_on: "ON"
+payload_off: "OFF"
+name: camera_motion
+device_class: motion
