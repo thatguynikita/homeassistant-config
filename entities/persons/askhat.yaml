@@ -1,0 +1,6 @@
+name: Askhat
+id: ask234
+device_trackers:
+  - device_tracker.oneplus_5t
+  - device_tracker.94_65_2d_46_f8_44
+  - device_tracker.30_85_a9_85_c4_7c
