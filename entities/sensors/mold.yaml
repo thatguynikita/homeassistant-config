@@ -1,0 +1,7 @@
+# Mold indicator
+platform: mold_indicator
+name: "Mold"
+indoor_temp_sensor: sensor.temperature
+indoor_humidity_sensor: sensor.humidity
+outdoor_temp_sensor: sensor.weather_temperature
+calibration_factor: 2.0
