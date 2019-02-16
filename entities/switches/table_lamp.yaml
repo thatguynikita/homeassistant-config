@@ -1,0 +1,8 @@
+platform: mqtt
+name: "Table lamp"
+command_topic: "cmnd/tablelamp/power"
+state_topic: "stat/tablelamp/POWER"
+qos: 1
+payload_on: "ON"
+payload_off: "OFF"
+retain: true
