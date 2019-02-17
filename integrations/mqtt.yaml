@@ -1,0 +1,6 @@
+# MQTT platform
+mqtt:
+  broker: mqtt.home
+  client_id: home_assistant
+  username: !secret mqtt_username
+  password: !secret mqtt_password
