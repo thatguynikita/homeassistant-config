@@ -1,0 +1,7 @@
+# Cloudflare dyndns 
+#cloudflare:
+#  email: !secret cloudflare_email
+#  api_key: !secret cloudflare_api_key
+#  zone: !secret cloudflare_zone
+#  records:
+#    - !secret cloudflare_record
