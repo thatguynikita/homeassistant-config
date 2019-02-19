@@ -1,0 +1,13 @@
+# Telegram bot
+telegram_bot:
+  - platform: webhooks
+    api_key: !secret telegram_api_key
+    allowed_chat_ids:
+      - !secret telegram_chat_id
+    # Public proxy. For test purposes only
+#    proxy_url: !secret socks_proxy_url
+#    proxy_params: 
+#      username: !secret socks_username
+#      password: !secret socks_password
+    # Since we are behind CDN, those are Cloudflare IP addresses
+    trusted_networks: !include cloudflare_ips.yaml
