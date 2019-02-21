@@ -1,6 +1,5 @@
 name: Nikita
 id: nik123
-user_id: !secret nikita_user_id
 device_trackers:
   - device_tracker.40_4e_36_89_be_2f
   - device_tracker.d0_81_7a_b6_0c_02
