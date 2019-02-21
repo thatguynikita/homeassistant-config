@@ -10,3 +10,4 @@ secrets.yaml
 known_devices.yaml
 plex.conf
 .uuid
+.HA_VERSION

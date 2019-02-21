@@ -11,13 +11,17 @@ homeassistant:
   # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
   time_zone: Europe/Moscow
   # Customizations
-  customize: 
+  customize: {}
   # Load integrations
   packages: !include_dir_named integrations
 
 # Enable the frontend
 frontend:
   themes: !include_dir_merge_named themes
+
+# Lovelace component for confuring the UI
+lovelace:
+  mode: yaml
 
 # Enable configuration UI
 config:
@@ -86,5 +90,5 @@ person: !include_dir_list entities/persons
 zone: !include_dir_list entities/zones
 
 # ========== Automations ==========
-automation: !include_dir_merge_list automations
-script: !include_dir_merge_list scripts
+automation: !include_dir_list automations
+script: !include_dir_named scripts

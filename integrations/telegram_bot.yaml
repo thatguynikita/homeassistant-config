@@ -10,4 +10,4 @@ telegram_bot:
 #      username: !secret socks_username
 #      password: !secret socks_password
     # Since we are behind CDN, those are Cloudflare IP addresses
-    trusted_networks: !include cloudflare_ips.yaml
+    trusted_networks: !include ../cloudflare_ips.yaml

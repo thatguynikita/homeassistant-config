@@ -45,7 +45,7 @@ views:
                 icon: 'mdi:spray-bottle'
                 type: sensor
             type: horizontal-stack
-          - entity: weather.home
+          - entity: weather.home_assistant
             type: weather-forecast
         type: vertical-stack
     icon: 'mdi:home-city-outline'
