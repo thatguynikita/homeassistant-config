@@ -1,3 +1,10 @@
+
+<p align=center>
+	<img alt="undefined" src="https://img.shields.io/github/license/thatguynikita/homeassistant-config.svg">
+	<img src="https://img.shields.io/badge/hass-0.95.4-blue.svg">
+	<img src="https://img.shields.io/badge/automations-11-purple.svg">
+</p>
+
 # Overview
 Very minimalistic implementation of "smart" home based on [Home Assistant](https://www.home-assistant.io/) with Telegram integration. 
 It won't cost you loads of money and will feed your curiosity about the current state of IoT.
